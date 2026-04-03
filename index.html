@@ -7,58 +7,58 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;height:100%;overflow:hidden}
-body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:rgba(20,20,20,0.92);color:#e8e8e8;padding:10px;border-radius:12px}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#F5F0E8;color:#3D3530;padding:10px;border-radius:12px}
 .wrap{padding:0}
 .outer{display:flex;align-items:center;gap:4px}
 .inner{flex:1;min-width:0}
 .daily-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
-.daily-section{padding:7px 9px;background:rgba(255,255,255,0.06);border-radius:7px;border:0.5px solid rgba(255,255,255,0.1)}
-.section-label{font-size:9px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.daily-section{padding:7px 9px;background:#EDE6D8;border-radius:7px;border:0.5px solid #D6CCB8}
+.section-label{font-size:9px;font-weight:500;color:#9E8E78;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
 .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.col{border:0.5px solid rgba(255,255,255,0.1);border-radius:9px;background:rgba(255,255,255,0.05);padding:8px}
-.col-date{font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:5px}
-.col-date.is-today{font-weight:600;color:#fff}
-.prog-bar{height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:3px;overflow:hidden}
-.prog-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width 0.3s}
-.col-stats{font-size:9px;color:rgba(255,255,255,0.3);margin-bottom:5px}
+.col{border:0.5px solid #D6CCB8;border-radius:9px;background:#EDE6D8;padding:8px}
+.col-date{font-size:10px;color:#9E8E78;margin-bottom:5px}
+.col-date.is-today{font-weight:600;color:#3D3530}
+.prog-bar{height:2px;background:#D6CCB8;border-radius:2px;margin-bottom:3px;overflow:hidden}
+.prog-fill{height:100%;background:#7A9E7E;border-radius:2px;transition:width 0.3s}
+.col-stats{font-size:9px;color:#B0A090;margin-bottom:5px}
 .task-list{display:flex;flex-direction:column;gap:2px}
-.empty-msg{font-size:9px;color:rgba(255,255,255,0.25);text-align:center;padding:4px 0}
-.t-row{display:flex;align-items:center;gap:4px;border:0.5px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 4px}
-.t-row.done{opacity:0.4}
-.t-row.done .utxt{text-decoration:line-through;color:rgba(255,255,255,0.3)}
-.t-row.carried{border-left:2px solid #EF9F27;border-radius:0 3px 3px 0;background:rgba(239,159,39,0.08)}
-.utxt{flex:1;font-size:11px;color:#e8e8e8;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.t-tag{font-size:8px;color:#EF9F27;background:rgba(239,159,39,0.15);border-radius:2px;padding:0 3px;flex-shrink:0}
+.empty-msg{font-size:9px;color:#B0A090;text-align:center;padding:4px 0}
+.t-row{display:flex;align-items:center;gap:4px;border:0.5px solid #D6CCB8;border-radius:3px;padding:2px 4px;background:#F5F0E8}
+.t-row.done{opacity:0.45}
+.t-row.done .utxt{text-decoration:line-through;color:#B0A090}
+.t-row.carried{border-left:2px solid #C8956C;border-radius:0 3px 3px 0;background:#F5EBE0}
+.utxt{flex:1;font-size:11px;color:#3D3530;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-tag{font-size:8px;color:#8B5E3C;background:#F0DDD0;border-radius:2px;padding:0 3px;flex-shrink:0}
 .d-row{display:flex;align-items:center;gap:4px;padding:1px 0}
-.d-row.done .utxt{text-decoration:line-through;color:rgba(255,255,255,0.3)}
+.d-row.done .utxt{text-decoration:line-through;color:#B0A090}
 .add-wrap{display:flex;align-items:center;gap:4px;margin-top:3px}
-.add-inp{flex:1;border:0.5px solid rgba(255,255,255,0.15);border-radius:3px;padding:2px 4px;font-size:11px;color:#e8e8e8;background:rgba(255,255,255,0.07);min-width:0;display:block;line-height:1;outline:none}
-.add-inp::placeholder{color:rgba(255,255,255,0.25);font-size:11px}
+.add-inp{flex:1;border:0.5px solid #D6CCB8;border-radius:3px;padding:2px 4px;font-size:11px;color:#3D3530;background:#F5F0E8;min-width:0;display:block;line-height:1;outline:none}
+.add-inp::placeholder{color:#B0A090;font-size:11px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="outer">
-    <span id="nav-prev" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.3" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.3">
-      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="9,2 4,6.5 9,11" fill="#fff"/></svg>
+    <span id="nav-prev" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.35" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.35">
+      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="9,2 4,6.5 9,11" fill="#9E8E78"/></svg>
     </span>
     <div class="inner">
       <div class="daily-row">
         <div class="daily-section">
           <div class="section-label">데일리 1</div>
           <div id="di1-list"></div>
-          <div class="add-wrap"><input class="add-inp" type="text" id="di1" placeholder="항목 추가..."/><span id="da1" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,0.3)'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
+          <div class="add-wrap"><input class="add-inp" type="text" id="di1" placeholder="항목 추가..."/><span id="da1" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:#B0A090" onmouseenter="this.style.color='#3D3530'" onmouseleave="this.style.color='#B0A090'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
         </div>
         <div class="daily-section">
           <div class="section-label">데일리 2</div>
           <div id="di2-list"></div>
-          <div class="add-wrap"><input class="add-inp" type="text" id="di2" placeholder="항목 추가..."/><span id="da2" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,0.3)'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
+          <div class="add-wrap"><input class="add-inp" type="text" id="di2" placeholder="항목 추가..."/><span id="da2" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:#B0A090" onmouseenter="this.style.color='#3D3530'" onmouseleave="this.style.color='#B0A090'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
         </div>
       </div>
       <div class="cols" id="cols"></div>
     </div>
-    <span id="nav-next" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.3" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.3">
-      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="4,2 9,6.5 4,11" fill="#fff"/></svg>
+    <span id="nav-next" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.35" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.35">
+      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="4,2 9,6.5 4,11" fill="#9E8E78"/></svg>
     </span>
   </div>
 </div>
@@ -87,13 +87,13 @@ function getDates(){return[shiftDate(TODAY,offset),shiftDate(TODAY,offset+1),shi
 const svgX=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="3.5" y1="3.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/><line x1="9.5" y1="3.5" x2="3.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
 const svgM=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="3" y1="6.5" x2="10" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
 const svgP=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
-function mkIcon(svg,red){const s=document.createElement('span');s.style.cssText='cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)';s.innerHTML=svg;s.onmouseenter=()=>s.style.color=red?'#ff6b6b':'#fff';s.onmouseleave=()=>s.style.color='rgba(255,255,255,0.3)';return s;}
-function mkCb(checked,fn){const c=document.createElement('input');c.type='checkbox';c.style.cssText='width:13px;height:13px;flex-shrink:0;cursor:pointer;accent-color:#1D9E75;margin:0';c.checked=checked;c.addEventListener('change',fn);return c;}
+function mkIcon(svg,red){const s=document.createElement('span');s.style.cssText='cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:#B0A090';s.innerHTML=svg;s.onmouseenter=()=>s.style.color=red?'#C8956C':'#3D3530';s.onmouseleave=()=>s.style.color='#B0A090';return s;}
+function mkCb(checked,fn){const c=document.createElement('input');c.type='checkbox';c.style.cssText='width:13px;height:13px;flex-shrink:0;cursor:pointer;accent-color:#7A9E7E;margin:0';c.checked=checked;c.addEventListener('change',fn);return c;}
 function syncInputHeights(){const ref=document.querySelector('.t-row');if(!ref)return;const h=ref.getBoundingClientRect().height;document.querySelectorAll('.add-inp').forEach(inp=>{inp.style.height=h+'px';});}
 function renderDailyGroup(grp,elId){
   const el=document.getElementById(elId);el.innerHTML='';
   const list=state[grp]||[];
-  if(!list.length){el.innerHTML='<div style="font-size:10px;color:rgba(255,255,255,0.25);padding:1px 0">항목을 추가해보세요</div>';return;}
+  if(!list.length){el.innerHTML='<div style="font-size:10px;color:#B0A090;padding:1px 0">항목을 추가해보세요</div>';return;}
   list.forEach((item,idx)=>{
     const key=grp+'_'+idx;
     const checked=!!(state.dailyChecks[TODAY]&&state.dailyChecks[TODAY][key]);
