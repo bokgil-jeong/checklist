@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>날짜별 체크리스트</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:rgba(20,20,20,0.92);color:#e8e8e8;padding:10px;border-radius:12px}
+.wrap{padding:0}
+.outer{display:flex;align-items:center;gap:4px}
+.inner{flex:1;min-width:0}
+.daily-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.daily-section{padding:7px 9px;background:rgba(255,255,255,0.06);border-radius:7px;border:0.5px solid rgba(255,255,255,0.1)}
+.section-label{font-size:9px;font-weight:500;color:rgba(255,255,255,0.4);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.col{border:0.5px solid rgba(255,255,255,0.1);border-radius:9px;background:rgba(255,255,255,0.05);padding:8px}
+.col-date{font-size:10px;color:rgba(255,255,255,0.45);margin-bottom:5px}
+.col-date.is-today{font-weight:600;color:#fff}
+.prog-bar{height:2px;background:rgba(255,255,255,0.1);border-radius:2px;margin-bottom:3px;overflow:hidden}
+.prog-fill{height:100%;background:#1D9E75;border-radius:2px;transition:width 0.3s}
+.col-stats{font-size:9px;color:rgba(255,255,255,0.3);margin-bottom:5px}
+.task-list{display:flex;flex-direction:column;gap:2px}
+.empty-msg{font-size:9px;color:rgba(255,255,255,0.25);text-align:center;padding:4px 0}
+.t-row{display:flex;align-items:center;gap:4px;border:0.5px solid rgba(255,255,255,0.1);border-radius:3px;padding:2px 4px}
+.t-row.done{opacity:0.4}
+.t-row.done .utxt{text-decoration:line-through;color:rgba(255,255,255,0.3)}
+.t-row.carried{border-left:2px solid #EF9F27;border-radius:0 3px 3px 0;background:rgba(239,159,39,0.08)}
+.utxt{flex:1;font-size:11px;color:#e8e8e8;line-height:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-tag{font-size:8px;color:#EF9F27;background:rgba(239,159,39,0.15);border-radius:2px;padding:0 3px;flex-shrink:0}
+.d-row{display:flex;align-items:center;gap:4px;padding:1px 0}
+.d-row.done .utxt{text-decoration:line-through;color:rgba(255,255,255,0.3)}
+.add-wrap{display:flex;align-items:center;gap:4px;margin-top:3px}
+.add-inp{flex:1;border:0.5px solid rgba(255,255,255,0.15);border-radius:3px;padding:2px 4px;font-size:11px;color:#e8e8e8;background:rgba(255,255,255,0.07);min-width:0;display:block;line-height:1;outline:none}
+.add-inp::placeholder{color:rgba(255,255,255,0.25);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="outer">
+    <span id="nav-prev" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.3" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.3">
+      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="9,2 4,6.5 9,11" fill="#fff"/></svg>
+    </span>
+    <div class="inner">
+      <div class="daily-row">
+        <div class="daily-section">
+          <div class="section-label">데일리 1</div>
+          <div id="di1-list"></div>
+          <div class="add-wrap"><input class="add-inp" type="text" id="di1" placeholder="항목 추가..."/><span id="da1" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,0.3)'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
+        </div>
+        <div class="daily-section">
+          <div class="section-label">데일리 2</div>
+          <div id="di2-list"></div>
+          <div class="add-wrap"><input class="add-inp" type="text" id="di2" placeholder="항목 추가..."/><span id="da2" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)" onmouseenter="this.style.color='#fff'" onmouseleave="this.style.color='rgba(255,255,255,0.3)'"><svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg></span></div>
+        </div>
+      </div>
+      <div class="cols" id="cols"></div>
+    </div>
+    <span id="nav-next" style="cursor:pointer;flex-shrink:0;display:flex;align-items:center;opacity:0.3" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0.3">
+      <svg width="13" height="13" viewBox="0 0 13 13"><polygon points="4,2 9,6.5 4,11" fill="#fff"/></svg>
+    </span>
+  </div>
+</div>
+<script>
+const STORE_KEY='cl_v10';
+function makeStr(y,m,d){return y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');}
+function todayStr(){const d=new Date();return makeStr(d.getFullYear(),d.getMonth()+1,d.getDate());}
+function shiftDate(s,n){const p=s.split('-');const d=new Date(+p[0],+p[1]-1,+p[2]);d.setDate(d.getDate()+n);return makeStr(d.getFullYear(),d.getMonth()+1,d.getDate());}
+function fmtDate(s){const p=s.split('-');const days=['일','월','화','수','목','금','토'];return parseInt(p[1])+'월 '+parseInt(p[2])+'일 ('+days[new Date(+p[0],+p[1]-1,+p[2]).getDay()]+')';}
+function load(){try{const r=JSON.parse(localStorage.getItem(STORE_KEY));if(!r)throw 0;if(!r.daily1)r.daily1=[];if(!r.daily2)r.daily2=[];if(!r.tasks)r.tasks={};if(!r.dailyChecks)r.dailyChecks={};return r;}catch(e){return{daily1:[],daily2:[],tasks:{},dailyChecks:{},_dailyResetDate:''};}}
+function save(s){try{localStorage.setItem(STORE_KEY,JSON.stringify(s));}catch(e){}}
+function resetDaily(st){const t=todayStr();if(st._dailyResetDate!==t){st.dailyChecks={};st._dailyResetDate=t;save(st);}}
+const TODAY=todayStr();
+function carryOver(st){
+  const y=shiftDate(TODAY,-1),yt=st.tasks[y];if(!yt)return;
+  const u=yt.filter(i=>!i.checked&&!i.carried);if(!u.length)return;
+  if(!st.tasks[TODAY])st.tasks[TODAY]=[];
+  u.forEach(i=>{if(!st.tasks[TODAY].find(x=>x.text===i.text&&x.carried))st.tasks[TODAY].push({text:i.text,checked:false,carried:true});i.carried=true;});
+  save(st);
+}
+let state=load();resetDaily(state);carryOver(state);
+function scheduleMidnight(){const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);setTimeout(()=>{resetDaily(state);renderAll();scheduleMidnight();},next-now);}
+scheduleMidnight();
+let offset=0;
+function getDates(){return[shiftDate(TODAY,offset),shiftDate(TODAY,offset+1),shiftDate(TODAY,offset+2)];}
+const svgX=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="3.5" y1="3.5" x2="9.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/><line x1="9.5" y1="3.5" x2="3.5" y2="9.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
+const svgM=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="3" y1="6.5" x2="10" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
+const svgP=`<svg width="13" height="13" viewBox="0 0 13 13"><line x1="6.5" y1="2.5" x2="6.5" y2="10.5" stroke="currentColor" stroke-width="1.2"/><line x1="2.5" y1="6.5" x2="10.5" y2="6.5" stroke="currentColor" stroke-width="1.2"/></svg>`;
+function mkIcon(svg,red){const s=document.createElement('span');s.style.cssText='cursor:pointer;flex-shrink:0;display:flex;align-items:center;color:rgba(255,255,255,0.3)';s.innerHTML=svg;s.onmouseenter=()=>s.style.color=red?'#ff6b6b':'#fff';s.onmouseleave=()=>s.style.color='rgba(255,255,255,0.3)';return s;}
+function mkCb(checked,fn){const c=document.createElement('input');c.type='checkbox';c.style.cssText='width:13px;height:13px;flex-shrink:0;cursor:pointer;accent-color:#1D9E75;margin:0';c.checked=checked;c.addEventListener('change',fn);return c;}
+function syncInputHeights(){const ref=document.querySelector('.t-row');if(!ref)return;const h=ref.getBoundingClientRect().height;document.querySelectorAll('.add-inp').forEach(inp=>{inp.style.height=h+'px';});}
+function renderDailyGroup(grp,elId){
+  const el=document.getElementById(elId);el.innerHTML='';
+  const list=state[grp]||[];
+  if(!list.length){el.innerHTML='<div style="font-size:10px;color:rgba(255,255,255,0.25);padding:1px 0">항목을 추가해보세요</div>';return;}
+  list.forEach((item,idx)=>{
+    const key=grp+'_'+idx;
+    const checked=!!(state.dailyChecks[TODAY]&&state.dailyChecks[TODAY][key]);
+    const div=document.createElement('div');div.className='d-row'+(checked?' done':'');
+    const cb=mkCb(checked,e=>{if(!state.dailyChecks[TODAY])state.dailyChecks[TODAY]={};state.dailyChecks[TODAY][key]=e.target.checked;save(state);renderDailyGroup(grp,elId);});
+    const txt=document.createElement('span');txt.className='utxt';txt.textContent=item;
+    const del=mkIcon(svgX,true);del.addEventListener('click',()=>{state[grp].splice(idx,1);save(state);renderDailyGroup(grp,elId);});
+    div.appendChild(cb);div.appendChild(txt);div.appendChild(del);el.appendChild(div);
+  });
+}
+function renderCols(){
+  const el=document.getElementById('cols');el.innerHTML='';
+  getDates().forEach(date=>{
+    const items=state.tasks[date]||[];
+    const done=items.filter(i=>i.checked).length;
+    const pct=items.length?Math.round(done/items.length*100):0;
+    const col=document.createElement('div');col.className='col';
+    const de=document.createElement('div');de.className='col-date'+(date===TODAY?' is-today':'');de.textContent=fmtDate(date);col.appendChild(de);
+    const pb=document.createElement('div');pb.className='prog-bar';pb.innerHTML='<div class="prog-fill" style="width:'+pct+'%"></div>';col.appendChild(pb);
+    const st=document.createElement('div');st.className='col-stats';st.textContent=done+' / '+items.length+' 완료';col.appendChild(st);
+    const tlist=document.createElement('div');tlist.className='task-list';
+    if(!items.length){tlist.innerHTML='<div class="empty-msg">할 일 없음</div>';}
+    else{items.forEach((item,idx)=>{
+      const div=document.createElement('div');div.className='t-row'+(item.checked?' done':'')+(item.carried?' carried':'');
+      const cb=mkCb(item.checked,e=>{state.tasks[date][idx].checked=e.target.checked;save(state);renderCols();});
+      const txtEl=document.createElement('span');txtEl.className='utxt';txtEl.textContent=item.text;
+      const db=mkIcon(svgM,true);db.addEventListener('click',()=>{state.tasks[date].splice(idx,1);save(state);renderCols();});
+      div.appendChild(cb);div.appendChild(txtEl);
+      if(item.carried){const tag=document.createElement('span');tag.className='t-tag';tag.textContent='이월';div.appendChild(tag);}
+      div.appendChild(db);tlist.appendChild(div);
+    });}
+    col.appendChild(tlist);
+    const ar=document.createElement('div');ar.className='add-wrap';
+    const inp=document.createElement('input');inp.className='add-inp';inp.type='text';inp.placeholder='항목 추가...';inp.maxLength=60;
+    const ab=mkIcon(svgP,false);
+    const doAdd=()=>{const t=inp.value.trim();if(!t)return;if(!state.tasks[date])state.tasks[date]=[];state.tasks[date].push({text:t,checked:false,carried:false});inp.value='';save(state);renderCols();};
+    ab.addEventListener('click',doAdd);inp.addEventListener('keydown',e=>{if(e.key==='Enter')doAdd();});
+    ar.appendChild(inp);ar.appendChild(ab);col.appendChild(ar);el.appendChild(col);
+  });
+  requestAnimationFrame(syncInputHeights);
+}
+function renderAll(){renderDailyGroup('daily1','di1-list');renderDailyGroup('daily2','di2-list');renderCols();}
+document.getElementById('nav-prev').addEventListener('click',()=>{offset--;renderAll();});
+document.getElementById('nav-next').addEventListener('click',()=>{offset++;renderAll();});
+[['da1','di1','daily1','di1-list'],['da2','di2','daily2','di2-list']].forEach(([bid,iid,grp,elId])=>{
+  document.getElementById(bid).addEventListener('click',()=>{const inp=document.getElementById(iid);const t=inp.value.trim();if(!t)return;state[grp].push(t);inp.value='';save(state);renderDailyGroup(grp,elId);});
+  document.getElementById(iid).addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.target.value.trim();if(!t)return;state[grp].push(t);e.target.value='';save(state);renderDailyGroup(grp,elId);});
+});
+renderAll();
+</script>
+</body>
+</html>
